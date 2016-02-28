@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: grafana
+  labels:
+    name: grafana
+spec:
+  replicas: 1
+  selector:
+    name: grafana
+  template:
+    metadata:
+      labels:
+        name: grafana
+    spec:
+      containers:
+      - name: grafana
+        image:  grafana/grafana
+        ports:
+          - containerPort: 3000
+        volumeMounts:
+          - name: grafana-data
+            mountPath: /var/lib/grafana
+      volumes:
+        - name: grafana-data
+          gcePersistentDisk:
+            pdName: grafana-data
+            fsType: "ext4"

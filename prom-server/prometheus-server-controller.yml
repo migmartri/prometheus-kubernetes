@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: prom-server
+  labels:
+    name: prom-server
+spec:
+  replicas: 1
+  selector:
+    name: prom-server
+  template:
+    metadata:
+      labels:
+        name: prom-server
+    spec:
+      containers:
+      - name: prom-server
+        image: gcr.io/miguel-bitnami-test/prom-server:0.1
+        ports:
+          - containerPort: 9090
+        volumeMounts:
+          - name: prom-server-data
+            mountPath: /prometheus
+      volumes:
+        - name: prom-server-data
+          gcePersistentDisk:
+            pdName: prometheus-data
+            fsType: "ext4"
